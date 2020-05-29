@@ -1,0 +1,9 @@
+{
+    "description": {"type": "str"},
+    "uid": {"type": "str"},
+    "state": {"type": "str", "enum": ["unstarted", "started", "completed"]},
+    "metadate": {
+        "type": "object"
+    },
+    "username": {"type": "str"}
+}
