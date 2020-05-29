@@ -51,7 +51,6 @@ class InMemoryTodoDB(object):
         if metadata is not None:
             item['metadata'] = metadata
 
-
 def get_app_db():
     global _DB
     if _DB is None:
@@ -73,16 +72,22 @@ def add_new_todo():
     )
 
 #Gets a specific Todo
-@app.route('/todos/{id}', methods=['GET'])
-def get_todo():
-    return {'hello': 'world'}
+@app.route('/todos/{uid}', methods=['GET'])
+def get_todo(uid):
+    return get_app_db().get_item(uid)
 
 #Deletes a specific Todo
-@app.route('/todos/{id}', methods=['DELETE'])
-def del_todo():
-    return {'hello': 'world'}
+@app.route('/todos/{uid}', methods=['DELETE'])
+def delete_todo(uid):
+    return get_app_db().delete_item(uid)
 
 #Updates the state of a Todo
-@app.route('/todos/{id}', methods=['PUT'])
-def update_tod():
-    return {'hello': 'world'}
+@app.route('/todos/{uid}', methods=['PUT'])
+def update_todo(uid):
+    body = app.current_request.json_body
+    get_app_db().update_item(
+        uid,
+        description=body.get('description'),
+        state=body.get('state'),
+        metadata=body.get('metadata')
+    )
