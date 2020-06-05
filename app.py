@@ -1,14 +1,15 @@
 from chalice import Chalice
-from chalicelib.db import InMemoryTodoDB
+from chalicelib import db
 
 app = Chalice(app_name='mytodo')
 app.debug = True
 _DB = None
 
+
 def get_app_db():
     global _DB
     if _DB is None:
-        _DB = InMemoryTodoDB()
+        _DB = db.InMemoryTodoDB()
     return _DB
 
 #Gets a list of all Todo's
