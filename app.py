@@ -12,7 +12,10 @@ _DB = None
 def get_app_db():
     global _DB
     if _DB is None:
-        _DB = db.InMemoryTodoDB()
+        _DB = db.DynamoDBTodo(
+            boto3.resource('dynamodb').Table(
+                os.environ['APP_TABLE_NAME'])
+        )
     return _DB
 
 #Gets a list of all Todo's
@@ -49,10 +52,3 @@ def update_todo(uid):
         state=body.get('state'),
         metadata=body.get('metadata')
     )
-
-#test route
-@app.route('/test-ddb')
-def test_ddb():
-    resource = boto3.resource('dynamodb')
-    table = resource.Table(os.environ['APP_TABLE_NAME'])
-    return table.name
