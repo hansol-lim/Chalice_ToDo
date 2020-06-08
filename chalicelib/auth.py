@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import jwt
 from chalice import UnauthorizedError
-
+from decimal import *
 
 # TODO: Figure out what we want to do with this.
 # We can either move this out to env vars in config.json,
@@ -15,12 +15,14 @@ _SECRET = b'\xf7\xb6k\xabP\xce\xc1\xaf\xad\x86\xcf\x84\x02\x80\xa0\xe0'
 
 
 def get_jwt_token(username, password, record):
+    password = str.encode(password)
     actual = hashlib.pbkdf2_hmac(
         record['hash'],
         password,
         record['salt'].value,
         record['rounds']
     )
+
     expected = record['hashed'].value
     if hmac.compare_digest(actual, expected):
         now = datetime.datetime.utcnow()

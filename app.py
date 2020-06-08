@@ -4,10 +4,12 @@ import boto3
 from chalice import Chalice
 from chalicelib import db
 
+from chalicelib import auth
+
 app = Chalice(app_name='mytodo')
 app.debug = True
 _DB = None
-
+_USER_DB = None
 
 def get_app_db():
     global _DB
@@ -17,6 +19,21 @@ def get_app_db():
                 os.environ['APP_TABLE_NAME'])
         )
     return _DB
+
+def get_users_db():
+    global _USER_DB
+    if _USER_DB is None:
+        _USER_DB = boto3.resource('dynamodb').Table(os.environ['USERS_TABLE_NAME'])
+    return _USER_DB
+
+@app.route('/login', methods=['POST'])
+def login():
+    body = app.current_request.json_body
+    record = get_users_db().get_item(
+        Key={'username': body['username']})['Item']
+    jwt_token = auth.get_jwt_token(
+        body['username'], body['password'], record)
+    return {'token': jwt_token}
 
 #Gets a list of all Todo's
 @app.route('/todos', methods=['GET'])
