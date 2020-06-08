@@ -1,3 +1,6 @@
+import os
+import boto3
+
 from chalice import Chalice
 from chalicelib import db
 
@@ -46,3 +49,10 @@ def update_todo(uid):
         state=body.get('state'),
         metadata=body.get('metadata')
     )
+
+#test route
+@app.route('/test-ddb')
+def test_ddb():
+    resource = boto3.resource('dynamodb')
+    table = resource.Table(os.environ['APP_TABLE_NAME'])
+    return table.name
