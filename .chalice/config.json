@@ -4,7 +4,8 @@
       "autogen_policy": false,
       "api_gateway_stage": "api",
       "environment_variables": {
-        "APP_TABLE_NAME": "todo-app-e73ac2a0-bd7a-45d1-af76-a6d59de836b6"
+        "APP_TABLE_NAME": "todo-app-e73ac2a0-bd7a-45d1-af76-a6d59de836b6",
+        "USERS_TABLE_NAME": "users-app-be100dc3-2136-49f3-b9ce-7cf11afa9dca"
       }
     }
   },
